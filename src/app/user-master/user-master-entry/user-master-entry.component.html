@@ -1,0 +1,151 @@
+
+<div class="form-page">
+
+  <div class="form-card">
+
+    <div class="form-card-header">
+
+      <h2>
+
+        {{ mode === 'add'
+            ? 'Add User'
+            : 'Edit User' }}
+
+      </h2>
+
+      <span class="usr-id">
+
+        {{ selectedUser?.id }}
+
+      </span>
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>USER NAME</label>
+
+        <input
+          type="text"
+          [(ngModel)]="selectedUser.username"
+          placeholder="Username">
+
+      </div>
+
+      <div class="form-group">
+
+        <label>EMAIL</label>
+
+        <input
+          type="email"
+          [(ngModel)]="selectedUser.email"
+          placeholder="name@blufin.com">
+
+      </div>
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>TEAM</label>
+
+        <select [(ngModel)]="selectedUser.team">
+
+          <option value="" disabled>
+            Select Team
+          </option>
+
+          <option value="Development">
+            Development
+          </option>
+
+          <option value="Testing">
+            Testing
+          </option>
+
+          <option value="Support">
+            Support
+          </option>
+
+        </select>
+
+        <span class="hint">
+          Sourced from Team Master.
+        </span>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>STATUS</label>
+
+        <select [(ngModel)]="selectedUser.status">
+
+          <option value="Active">
+            Active
+          </option>
+
+          <option value="Suspend">
+            Suspend
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>PASSWORD</label>
+
+      <div class="password-wrap">
+
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          [(ngModel)]="selectedUser.password"
+          placeholder="Enter Password">
+
+        <span
+          class="show-toggle"
+          (click)="toggleShowPassword()">
+
+          {{ showPassword ? 'Hide' : 'Show' }}
+
+        </span>
+
+      </div>
+
+      <span class="hint">
+        At least 8 characters with one uppercase and one number.
+      </span>
+
+    </div>
+
+    <div class="btn-row">
+
+      <button
+        class="btn-back"
+        (click)="backToList()">
+
+        Back
+
+      </button>
+
+      <button
+        class="btn-save"
+        (click)="saveUser()">
+
+        Save
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,132 @@
+<style>
+  body {
+    background-image: url("../../../assets/images/lightbule.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+</style>
+
+<body>
+
+  <div class="d-flex justify-content-center">
+    <img src="assets/images/images.jpeg" alt="Logo" width="100">
+  </div>
+
+  <div class="text-center mb-3">
+    <strong>Blufin Ticketing System</strong>
+  </div>
+
+  <div class="container d-flex justify-content-center">
+
+    <form [formGroup]="loginForm" class="row">
+
+      <div class="card p-3" style="height:381px; width:570px;">
+
+        <!-- Login -->
+        <div>
+          <label for="login" class="text-primary fw-bold">Login</label>
+
+          <input
+            id="login"
+            #loginInput
+            type="text"
+            class="form-control"
+            formControlName="login"
+            placeholder="Enter Login">
+        </div>
+
+        <!-- Password -->
+        <div class="mt-2">
+          <label for="password" class="text-primary fw-bold">Password</label>
+        </div>
+
+        <div class="input-group">
+
+          <input
+            id="password"
+            #passwordInput
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control"
+            formControlName="password"
+            placeholder="Enter Password">
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showPassword = !showPassword">
+
+            {{ showPassword ? 'Hide' : 'Show' }}
+
+          </button>
+
+        </div>
+
+        <!-- Captcha -->
+        <div class="mt-3">
+
+          <label class="text-danger">Captcha</label>
+
+          <div class="d-flex align-items-center gap-2">
+
+            <div
+              [innerHTML]="captchaSvg"
+              style="border:1px solid #ccc; width:150px; height:50px;">
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="reloadCaptcha()">
+
+              &#8635;
+
+            </button>
+
+          </div>
+
+          <input
+            #captchaInput
+            type="text"
+            class="form-control mt-2"
+            placeholder="Enter Captcha">
+
+        </div>
+
+        <!-- Login Button -->
+        <button
+          type="button"
+          class="btn btn-primary mt-3"
+          (click)="onLogin(loginInput.value,passwordInput.value,captchaInput.value)">
+
+          Login
+
+        </button>
+
+        <!-- Remember & Forgot Password -->
+        <div class="mt-3 d-flex justify-content-between align-items-center">
+
+          <div>
+            <input type="checkbox" id="remember">
+            <label for="remember"> Remember</label>
+          </div>
+
+          <div>
+            <a routerLink="/forgot-password">
+              Forgot Password?
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</body>

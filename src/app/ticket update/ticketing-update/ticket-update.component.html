@@ -1,0 +1,1337 @@
+<header class="topbar">
+
+
+
+  <button class="menu-btn" (click)="toggleSidebar()">
+
+
+
+    &#9776;
+
+
+
+  </button>
+
+
+
+</header>
+
+
+
+
+
+
+
+<div
+
+
+
+  class="sidebar-overlay"
+
+
+
+  [class.active]="sidebarOpen"
+
+
+
+  (click)="closeSidebar()">
+
+
+
+</div>
+
+
+
+
+
+
+
+<aside
+
+
+
+  class="sidebar"
+
+
+
+  [class.active]="sidebarOpen">
+
+
+
+
+
+
+
+  <button
+
+
+
+    class="sidebar-close"
+
+
+
+    (click)="closeSidebar()">
+
+
+
+    &times;
+
+
+
+  </button>
+
+
+
+
+
+
+
+  <h3>Navigation</h3>
+
+
+
+
+
+
+
+  <a
+
+
+
+    class="menu-item"
+
+
+
+    routerLink="/ticketing-system"
+
+
+
+    (click)="closeSidebar()">
+
+
+
+    Ticketing System
+
+
+
+  </a>
+
+
+
+
+
+
+
+  <a
+
+
+
+    class="menu-item"
+
+
+
+    routerLink="/ticket-update"
+
+
+
+    (click)="closeSidebar()">
+
+
+
+    Ticket Update
+
+
+
+  </a>
+
+
+
+
+
+
+
+  <a
+
+
+
+    class="menu-item"
+
+
+
+    routerLink="/country-master"
+
+
+
+    (click)="closeSidebar()">
+
+
+
+    Country Master
+
+
+
+  </a>
+
+
+
+
+
+
+
+  <a
+
+
+
+    class="menu-item"
+
+
+
+    routerLink="/team-master"
+
+
+
+    (click)="closeSidebar()">
+
+
+
+    Team Master
+
+
+
+  </a>
+
+
+
+
+
+
+
+  <a
+
+
+
+    class="menu-item"
+
+
+
+    routerLink="/client-master"
+
+
+
+    (click)="closeSidebar()">
+
+
+
+    Client Master
+
+
+
+  </a>
+
+
+
+
+
+
+
+</aside>
+
+
+
+
+
+
+
+<div class="page-content">
+
+
+
+
+
+
+
+  <!-- LIST VIEW -->
+
+
+
+
+
+
+
+  <div *ngIf="mode === 'list'">
+
+
+
+
+
+
+
+    <div class="page-header">
+
+
+
+
+
+
+
+      <div>
+
+
+
+        <h1>Ticket Update</h1>
+
+
+
+        <p class="subtitle">
+
+
+
+          Ticket Update Details
+
+
+
+        </p>
+
+
+
+      </div>
+
+
+
+
+
+
+
+      <div class="search-box">
+
+
+
+
+
+
+
+        <input
+
+
+
+          type="text"
+
+
+
+          placeholder="🔍 Search..."
+
+
+
+          [value]="searchText"
+
+
+
+          (input)="searchText = $any($event.target).value">
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+
+
+      <div class="header-actions">
+
+
+
+
+
+
+
+        <button
+
+
+
+          class="report-btn"
+
+
+
+          (click)="Report()">
+
+
+
+          Report
+
+
+
+        </button>
+
+
+
+
+
+
+
+        <button
+
+
+
+          class="add-btn"
+
+
+
+          (click)="openAdd()">
+
+
+
+          + Add Update
+
+
+
+        </button>
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <div class="table-wrapper">
+
+
+
+
+
+
+
+      <table>
+
+
+
+
+
+
+
+        <thead>
+
+
+
+
+
+
+
+          <tr>
+
+
+
+
+
+
+
+            <th>TICKET NO</th>
+
+
+
+            <th>STATUS</th>
+
+
+
+            <th>ASSIGN TO</th>
+
+
+
+            <th>ASSIGNED ON</th>
+
+
+
+            <th>HOURS</th>
+
+
+
+            <th>ACTION</th>
+
+
+
+
+
+
+
+          </tr>
+
+
+
+
+
+
+
+        </thead>
+
+
+
+
+
+
+
+        <tbody>
+
+
+
+
+
+
+
+          <tr *ngFor="let update of filteredUpdates()">
+
+
+
+
+
+
+
+            <td>{{ update.ticketNo }}</td>
+
+
+
+            <td>{{ update.updateStatus }}</td>
+
+
+
+            <td>{{ update.assignTo }}</td>
+
+
+
+            <td>{{ update.assignedOn }}</td>
+
+
+
+            <td>{{ update.hours }}</td>
+
+
+
+
+
+
+
+            <td>
+
+
+
+
+
+
+
+              <a
+
+
+
+                class="view-link"
+
+
+
+                (click)="openView(update)">
+
+
+
+
+
+
+
+                View
+
+
+
+
+
+
+
+              </a>
+
+
+
+
+
+
+
+            </td>
+
+
+
+
+
+
+
+          </tr>
+
+
+
+
+
+
+
+          <tr *ngIf="filteredUpdates().length === 0">
+
+
+
+
+
+
+
+            <td colspan="6" style="text-align:center">
+
+
+
+
+
+
+
+              No Ticket Updates Found
+
+
+
+
+
+
+
+            </td>
+
+
+
+
+
+
+
+          </tr>
+
+
+
+
+
+
+
+        </tbody>
+
+
+
+
+
+
+
+      </table>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <div class="bottom-back-row">
+
+
+
+
+
+
+
+      <button
+
+
+
+        class="back-btn"
+
+
+
+        (click)="goBackToLogin()">
+
+
+
+
+
+
+
+        ← Back
+
+
+
+
+
+
+
+      </button>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+  </div>
+
+
+
+<!-- ADD / EDIT -->
+
+
+
+
+
+
+
+<div
+
+
+
+  class="form-page"
+
+
+
+  *ngIf="mode === 'add' || mode === 'edit'">
+
+
+
+
+
+
+
+  <form
+
+
+
+    class="form-card"
+
+
+
+    [formGroup]="updateForm"
+
+
+
+    (ngSubmit)="saveUpdate()">
+
+
+
+
+
+
+
+    <div class="form-card-header">
+
+
+
+
+
+
+
+      <h2>
+
+
+
+
+
+
+
+        {{ mode === 'add'
+
+
+
+        ? 'Add Ticket Update'
+
+
+
+        : 'Edit Ticket Update' }}
+
+
+
+
+
+
+
+      </h2>
+
+
+
+
+
+
+
+      <span class="usr-id">
+
+
+
+
+
+
+
+        {{ selectedUpdate.ticketNo }}
+
+
+
+
+
+
+
+      </span>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <!-- TICKET NO -->
+
+
+
+
+
+
+
+    <div class="form-row">
+
+
+
+
+
+
+
+      <div class="form-group">
+
+
+
+
+
+
+
+        <label>TICKET NO</label>
+
+
+
+
+
+
+
+        <input
+
+
+
+          type="text"
+
+
+
+          formControlName="ticketNo"
+
+
+
+          readonly>
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+
+
+      <!-- STATUS -->
+
+
+
+
+
+
+
+      <div class="form-group">
+
+
+
+
+
+
+
+        <label>UPDATE STATUS</label>
+
+
+
+
+
+
+
+        <select formControlName="updateStatus">
+
+
+
+
+
+
+
+          <option value="Open">Open</option>
+
+
+
+
+
+
+
+          <option value="Development">
+
+
+
+            Development
+
+
+
+          </option>
+
+
+
+
+
+
+
+          <option value="Testing">
+
+
+
+            Testing
+
+
+
+          </option>
+
+
+
+
+
+
+
+          <option value="Ready For UAT">
+
+
+
+            Ready For UAT
+
+
+
+          </option>
+
+
+
+
+
+
+
+          <option value="Closed">
+
+
+
+            Closed
+
+
+
+          </option>
+
+
+
+
+
+
+
+        </select>
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <!-- ASSIGN TO -->
+
+
+
+
+
+
+
+    <div class="form-row">
+
+
+
+
+
+
+
+      <div class="form-group">
+
+
+
+
+
+
+
+        <label>ASSIGN TO</label>
+
+
+
+
+
+
+
+        <input
+
+
+
+          type="text"
+
+
+
+          formControlName="assignTo"
+
+
+
+          placeholder="Enter Assign To">
+
+
+
+
+
+
+
+        <small
+
+
+
+          *ngIf="updateForm.get('assignTo')?.touched &&
+
+
+
+                 updateForm.get('assignTo')?.invalid"
+
+
+
+          style="color:red">
+
+
+
+
+
+
+
+          Assign To is required
+
+
+
+
+
+
+
+        </small>
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+
+
+      <!-- ASSIGNED ON -->
+
+
+
+
+
+
+
+      <div class="form-group">
+
+
+
+
+
+
+
+        <label>ASSIGNED ON</label>
+
+
+
+
+
+
+
+        <input
+
+
+
+          type="date"
+
+
+
+          formControlName="assignedOn">
+
+
+
+
+
+
+
+        <small
+
+
+
+          *ngIf="updateForm.get('assignedOn')?.touched &&
+
+
+
+                 updateForm.get('assignedOn')?.invalid"
+
+
+
+          style="color:red">
+
+
+
+
+
+
+
+          Assigned On is required
+
+
+
+
+
+
+
+        </small>
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+
+
+    </div>
+
+    <!-- HOURS -->
+
+
+
+    <div class="form-row">
+
+
+
+      <div class="form-group">
+
+
+
+        <label>HOURS</label>
+
+
+
+        <input
+
+          type="number"
+
+          formControlName="hours"
+
+          placeholder="Enter Hours">
+
+
+
+        <small
+
+          *ngIf="updateForm.get('hours')?.touched &&
+
+                 updateForm.get('hours')?.invalid"
+
+          style="color:red">
+
+
+
+          Hours is required
+
+
+
+        </small>
+
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+    <!-- COMMENTS -->
+
+
+
+    <div class="form-group">
+
+
+
+      <label>COMMENTS</label>
+
+
+
+      <textarea
+
+        rows="4"
+
+        formControlName="comments"
+
+        placeholder="Enter Comments">
+
+      </textarea>
+
+
+
+      <small
+
+        *ngIf="updateForm.get('comments')?.touched &&
+
+               updateForm.get('comments')?.invalid"
+
+        style="color:red">
+
+
+
+        Comments are required
+
+
+
+      </small>
+
+
+
+    </div>
+
+
+
+    <div class="btn-row">
+
+
+
+      <button
+
+        type="button"
+
+        class="btn-back"
+
+        (click)="backToList()">
+
+
+
+        Back
+
+
+
+      </button>
+
+
+
+      <button
+
+        type="submit"
+
+        class="btn-save">
+
+
+
+        Save
+
+
+
+      </button>
+
+
+
+    </div>
+
+  </form>
+
+
+
+</div>
+
+
+
+</div>

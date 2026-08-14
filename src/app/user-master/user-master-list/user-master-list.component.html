@@ -1,0 +1,172 @@
+<header class="topbar">
+  <button class="menu-btn" (click)="toggleSidebar()">&#9776;</button>
+</header>
+
+<div class="sidebar-overlay"
+     [class.active]="sidebarOpen"
+     (click)="closeSidebar()">
+</div>
+
+<aside class="sidebar"
+       [class.active]="sidebarOpen">
+
+  <button class="sidebar-close"
+          (click)="closeSidebar()">
+    &times;
+  </button>
+
+  <h3>Navigation</h3>
+
+  <a class="menu-item"
+     routerLink="/ticketing-system"
+     (click)="closeSidebar()">
+    Ticketing System
+  </a>
+
+  <a class="menu-item"
+     routerLink="/country-master"
+     (click)="closeSidebar()">
+    Country Master
+  </a>
+
+  <a class="menu-item"
+     routerLink="/team-master"
+     (click)="closeSidebar()">
+    Team Master
+  </a>
+
+  <a class="menu-item"
+     routerLink="/ticket-update"
+     (click)="closeSidebar()">
+    Ticketing Update
+  </a>
+
+  <a class="menu-item"
+     routerLink="/client-master"
+     (click)="closeSidebar()">
+    Client Master
+  </a>
+
+</aside>
+
+<div class="page-content">
+
+  <div class="page-header">
+
+    <div>
+
+      <h1>User Login Master</h1>
+
+      <p class="subtitle">
+        Team accounts that can sign in to the ticketing system.
+      </p>
+
+    </div>
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        placeholder="🔍 Search..."
+        [(ngModel)]="searchText"
+        (input)="searchUser()">
+
+    </div>
+
+    <div class="header-actions">
+
+      <button
+        class="report-btn"
+        (click)="report()">
+        Report
+      </button>
+
+      <button
+        class="add-btn"
+        (click)="openAdd()">
+        + Add User
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="table-wrapper">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>USER NAME</th>
+
+          <th>EMAIL</th>
+
+          <th>TEAM</th>
+
+          <th>STATUS</th>
+
+          <th>ACTION</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let user of filteredUsers()">
+
+          <td>{{ user.username }}</td>
+
+          <td>{{ user.email }}</td>
+
+          <td>{{ user.team }}</td>
+
+          <td>
+
+            <span
+              class="status-badge"
+              [ngClass]="user.status === 'Active'
+              ? 'status-active'
+              : 'status-suspend'">
+
+              {{ user.status }}
+
+            </span>
+
+          </td>
+
+          <td class="view-cell">
+
+            <a
+              class="view-link"
+              (click)="openView(user)">
+              View
+            </a>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="bottom-back-row">
+
+    <button
+      class="back-btn"
+      (click)="goBackToLogin()">
+
+      <span>&#8592;</span>
+
+      Back
+
+    </button>
+
+  </div>
+
+</div>

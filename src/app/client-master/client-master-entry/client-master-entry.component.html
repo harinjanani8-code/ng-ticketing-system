@@ -1,0 +1,148 @@
+<div class="form-page">
+
+  <div class="form-card">
+
+    <div class="form-card-header">
+
+      <h2>
+
+        {{ mode === 'edit'
+        ? 'Edit Client'
+        : 'Add Client' }}
+
+      </h2>
+
+      <span class="usr-id">
+
+        {{ selectedClient.id }}
+
+      </span>
+
+    </div>
+
+    <div
+      *ngIf="errorMessage"
+      class="error-box">
+
+      {{ errorMessage }}
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>CLIENT NAME</label>
+
+        <input
+          type="text"
+          [(ngModel)]="selectedClient.clientName"
+          maxlength="100"
+          placeholder="Acme Corp">
+
+        <span class="hint">
+          Max 100 characters, no special characters.
+        </span>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>CLIENT CODE</label>
+
+        <input
+          type="text"
+          [(ngModel)]="selectedClient.clientCode"
+          maxlength="5"
+          placeholder="ACME">
+
+        <span class="hint">
+          Max 5 characters.
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>COUNTRY</label>
+
+        <select [(ngModel)]="selectedClient.country">
+
+          <option value="" disabled>
+            Select Country
+          </option>
+
+          <option
+            *ngFor="let c of countries"
+            [value]="c">
+
+            {{ c }}
+
+          </option>
+
+        </select>
+
+        <span class="hint">
+          Sourced from Country Master.
+        </span>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>STATUS</label>
+
+        <select [(ngModel)]="selectedClient.status">
+
+          <option value="Active">
+            Active
+          </option>
+
+          <option value="Suspend">
+            Suspend
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>EMAIL</label>
+
+      <input
+        type="email"
+        [(ngModel)]="selectedClient.email"
+        placeholder="name@company.com">
+
+    </div>
+
+    <div class="btn-row">
+
+      <button
+        class="btn-back"
+        (click)="backToList()">
+
+        Back
+
+      </button>
+
+      <button
+        class="btn-save"
+        (click)="saveClient()">
+
+        Save
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

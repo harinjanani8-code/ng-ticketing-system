@@ -1,0 +1,140 @@
+<nav class="navbar">
+
+  <div class="nav-left">
+    <span class="logo-icon">b</span>
+    <span class="logo-text">
+      blufin<span class="dot">.</span>
+    </span>
+  </div>
+
+  <div class="nav-center">
+    <a class="nav-link active" routerLink="/ticket-master-list">
+      Tickets
+    </a>
+
+    <a class="nav-link" routerLink="/client-master-list">
+      Clients
+    </a>
+
+    <a class="nav-link" routerLink="/user-master-login">
+      Users
+    </a>
+  </div>
+
+  <div class="nav-right">
+    <a class="nav-link" routerLink="/login">
+      Sign out
+    </a>
+  </div>
+
+</nav>
+
+<div class="page-content">
+
+  <div class="page-header">
+
+    <div>
+
+      <h1>Ticket Master</h1>
+
+      <p class="subtitle">
+        Every request from open to closed, with hours logged against owner,
+        developer and tester.
+      </p>
+
+    </div>
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        placeholder="🔍 Search Ticket..."
+        [(ngModel)]="searchText">
+
+    </div>
+
+    <div class="header-actions">
+
+      <button
+        class="report-btn"
+        (click)="Report()">
+        Report
+      </button>
+
+      <button
+        class="add-btn"
+        routerLink="/ticket-master-entry">
+        + Add Ticket
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="table-wrapper">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>SPRINT</th>
+          <th>TICKET NO</th>
+          <th>TICKET DATE</th>
+          <th>DELIVERY DATE</th>
+          <th>TEAM</th>
+          <th>ASSIGN TO</th>
+          <th>ACTION</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let ticket of filteredTickets()">
+
+          <td>{{ticket.sprint}}</td>
+
+          <td>{{ticket.ticketNo}}</td>
+
+          <td>{{ticket.ticketDate}}</td>
+
+          <td>{{ticket.deliveryDate}}</td>
+
+          <td>{{ticket.team}}</td>
+
+          <td>{{ticket.assignTo}}</td>
+
+          <td class="view-cell">
+
+            <a
+              class="view-link"
+              (click)="openView(ticket)">
+              View
+            </a>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="bottom-back-row">
+
+    <button
+      class="back-btn"
+      (click)="goBackToUserMaster()">
+
+      ← Back
+
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,105 @@
+<div class="form-page">
+
+  <div class="form-card">
+
+    <div class="form-card-header">
+
+      <h2>
+
+        {{mode=='add' ? 'Add Country' : 'Edit Country'}}
+
+      </h2>
+
+      <span class="usr-id">
+
+        {{selectedCountry.id}}
+
+      </span>
+
+    </div>
+
+    <div
+      class="error-box"
+      *ngIf="errorMessage">
+
+      {{errorMessage}}
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>COUNTRY CODE</label>
+
+        <input
+          type="text"
+          maxlength="2"
+          placeholder="IN"
+          [(ngModel)]="selectedCountry.countryCode">
+
+        <span class="hint">
+          Maximum 2 characters.
+        </span>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>COUNTRY NAME</label>
+
+        <input
+          type="text"
+          maxlength="100"
+          placeholder="India"
+          [(ngModel)]="selectedCountry.countryName">
+
+        <span class="hint">
+          Maximum 100 characters. No special characters.
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>STATUS</label>
+
+        <select [(ngModel)]="selectedCountry.status">
+
+          <option value="Active">Active</option>
+
+          <option value="Suspend">Suspend</option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="btn-row">
+
+      <button
+        class="btn-back"
+        (click)="backToList()">
+
+        Back
+
+      </button>
+
+      <button
+        class="btn-save"
+        (click)="saveCountry()">
+
+        Save
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

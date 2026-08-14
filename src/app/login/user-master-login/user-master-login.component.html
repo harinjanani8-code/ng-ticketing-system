@@ -1,0 +1,362 @@
+<header class="topbar">
+
+  <button class="menu-btn" (click)="toggleSidebar()">
+    &#9776;
+  </button>
+
+</header>
+
+<div
+  class="sidebar-overlay"
+  [class.active]="sidebarOpen"
+  (click)="closeSidebar()">
+</div>
+
+<aside
+  class="sidebar"
+  [class.active]="sidebarOpen">
+
+  <button
+    class="sidebar-close"
+    (click)="closeSidebar()">
+    &times;
+  </button>
+
+  <h3>Navigation</h3>
+
+  <a
+    class="menu-item"
+    routerLink="/ticketing-system"
+    (click)="closeSidebar()">
+    Ticketing System
+  </a>
+
+  <a
+    class="menu-item"
+    routerLink="/country-master"
+    (click)="closeSidebar()">
+    Country Master
+  </a>
+
+  <a
+    class="menu-item"
+    routerLink="/team-master"
+    (click)="closeSidebar()">
+    Team Master
+  </a>
+
+  <a
+    class="menu-item"
+    routerLink="/ticket-update"
+    (click)="closeSidebar()">
+    Ticket Update
+  </a>
+
+  <a
+    class="menu-item"
+    routerLink="/client-master"
+    (click)="closeSidebar()">
+    Client Master
+  </a>
+
+</aside>
+
+<div class="page-content">
+
+  <!-- LIST VIEW -->
+
+  <div *ngIf="mode === 'list'">
+
+    <div class="page-header">
+
+      <div>
+        <h1>User Login Master</h1>
+        <p class="subtitle">
+          Team accounts that can sign in to the ticketing system.
+        </p>
+      </div>
+
+      <div class="search-box">
+
+        <input
+          type="text"
+          placeholder="🔍 Search..."
+          [value]="searchText"
+          (input)="searchText = $any($event.target).value">
+
+      </div>
+
+      <div class="header-actions">
+
+        <button
+          class="report-btn"
+          (click)="report()">
+          Report
+        </button>
+
+        <button
+          class="add-btn"
+          (click)="openAdd()">
+          + Add User
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>USER NAME</th>
+            <th>EMAIL</th>
+            <th>TEAM</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+                    <tr *ngFor="let user of filteredUsers()">
+
+            <td>{{ user.username }}</td>
+
+            <td>{{ user.email }}</td>
+
+            <td>{{ user.team }}</td>
+
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="user.status === 'Active'
+                ? 'status-active'
+                : 'status-suspend'">
+
+                {{ user.status }}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              <a
+                class="view-link"
+                (click)="openView(user)">
+
+                View
+
+              </a>
+
+              <a
+                class="delete-link"
+                (click)="deleteUser(user.id)"
+  title="Delete">
+
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+    <path d="M10 11v6"></path>
+    <path d="M14 11v6"></path>
+    <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
+  </svg>
+                  	
+
+              </a>
+
+            </td>
+
+          </tr>
+
+          <tr *ngIf="filteredUsers().length === 0">
+
+            <td colspan="5" style="text-align:center">
+
+              No Users Found
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="bottom-back-row">
+
+      <button
+        class="back-btn"
+        (click)="goBackToLogin()">
+
+        ← Back
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- ADD / EDIT -->
+
+  <div
+    class="form-page"
+    *ngIf="mode === 'add' || mode === 'edit'">
+
+    <form
+      class="form-card"
+      [formGroup]="userForm"
+      (ngSubmit)="saveUser()">
+
+      <div class="form-card-header">
+
+        <h2>
+
+          {{ mode === 'add' ? 'Add User' : 'Edit User' }}
+
+        </h2>
+
+        <span class="usr-id">
+
+          {{ selectedUser.id }}
+
+        </span>
+
+      </div>
+            <!-- USER NAME -->
+
+      <div class="form-group">
+
+        <label>USER NAME</label>
+
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="Enter User Name">
+
+        <small
+          *ngIf="userForm.get('username')?.touched &&
+                 userForm.get('username')?.invalid"
+          style="color:red">
+
+          User Name is required
+
+        </small>
+
+      </div>
+
+      <!-- EMAIL -->
+
+      <div class="form-group">
+
+        <label>EMAIL</label>
+
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Enter Email">
+
+        <small
+          *ngIf="userForm.get('email')?.touched &&
+                 userForm.get('email')?.invalid"
+          style="color:red">
+
+          Email is required
+
+        </small>
+
+      </div>
+
+      <!-- TEAM -->
+
+      <div class="form-group">
+
+        <label>TEAM</label>
+
+        <input
+          type="text"
+          formControlName="team"
+          placeholder="Enter Team">
+
+        <small
+          *ngIf="userForm.get('team')?.touched &&
+                 userForm.get('team')?.invalid"
+          style="color:red">
+
+          Team is required
+
+        </small>
+
+      </div>
+
+      <!-- STATUS -->
+
+      <div class="form-group">
+
+        <label>STATUS</label>
+
+        <select formControlName="status">
+
+          <option value="Active">Active</option>
+
+          <option value="Suspend">Suspend</option>
+
+        </select>
+
+      </div>
+
+      <!-- PASSWORD -->
+
+      <div class="form-group">
+
+        <label>PASSWORD</label>
+
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Enter Password">
+
+        <small
+          *ngIf="userForm.get('password')?.touched &&
+                 userForm.get('password')?.invalid"
+          style="color:red">
+
+          Password is required
+
+        </small>
+
+      </div>
+            <div class="btn-row">
+
+        <button
+          type="button"
+          class="btn-back"
+          (click)="backToList()">
+
+          Back
+
+        </button>
+
+        <button
+          type="submit"
+          class="btn-save">
+
+          Save
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

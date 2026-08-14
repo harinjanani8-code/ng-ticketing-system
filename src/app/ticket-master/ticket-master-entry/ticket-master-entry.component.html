@@ -1,0 +1,218 @@
+<div class="page-content">
+
+  <div class="form-page">
+
+    <div class="form-card">
+
+      <div class="form-card-header">
+
+        <h2>
+          {{ isEdit ? 'Edit Ticket' : 'Add Ticket' }}
+        </h2>
+
+        <span class="usr-id">
+          {{ selectedTicket.ticketNo }}
+        </span>
+
+      </div>
+
+      <div class="error-box" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>TICKET NO</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedTicket.ticketNo"
+            readonly>
+        </div>
+
+        <div class="form-group">
+          <label>CLIENT</label>
+
+          <select [(ngModel)]="selectedTicket.client">
+
+            <option value="">Select Client</option>
+
+            <option *ngFor="let c of clients" [value]="c">
+              {{ c }}
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>TICKET DATE</label>
+          <input
+            type="date"
+            [(ngModel)]="selectedTicket.ticketDate">
+        </div>
+
+        <div class="form-group">
+          <label>DELIVERY DATE</label>
+          <input
+            type="date"
+            [(ngModel)]="selectedTicket.deliveryDate">
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>TEAM</label>
+
+          <select [(ngModel)]="selectedTicket.team">
+
+            <option value="">Select Team</option>
+
+            <option *ngFor="let t of teams" [value]="t">
+              {{ t }}
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+          <label>REQUESTED BY</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedTicket.requestedBy">
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>ASSIGN TO</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedTicket.assignTo">
+        </div>
+
+        <div class="form-group">
+          <label>SPRINT</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedTicket.sprint">
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>TICKET STATUS</label>
+
+          <select [(ngModel)]="selectedTicket.ticketStatus">
+
+            <option>Open</option>
+            <option>Development</option>
+            <option>Testing</option>
+            <option>Ready For UAT</option>
+            <option>Closed</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>DESCRIPTION</label>
+
+        <textarea
+          rows="4"
+          [(ngModel)]="selectedTicket.description">
+        </textarea>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>OWNER</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedTicket.owner">
+        </div>
+
+        <div class="form-group">
+          <label>OWNER HOURS</label>
+          <input
+            type="number"
+            [(ngModel)]="selectedTicket.ownerHrs">
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>DEVELOPER</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedTicket.developer">
+        </div>
+
+        <div class="form-group">
+          <label>DEVELOPER HOURS</label>
+          <input
+            type="number"
+            [(ngModel)]="selectedTicket.developerHrs">
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>TESTER</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedTicket.tester">
+        </div>
+
+        <div class="form-group">
+          <label>TESTER HOURS</label>
+          <input
+            type="number"
+            [(ngModel)]="selectedTicket.testerHrs">
+        </div>
+
+      </div>
+
+      <div class="btn-row">
+
+        <button
+          class="btn-back"
+          routerLink="/ticket-master-list">
+          Back
+        </button>
+
+        <button
+          class="btn-save"
+          (click)="saveTicket()">
+          Save
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

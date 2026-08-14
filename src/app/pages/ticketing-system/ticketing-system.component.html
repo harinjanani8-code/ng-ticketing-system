@@ -1,0 +1,946 @@
+<div class="page-content">
+
+
+
+  <!-- LIST VIEW -->
+
+  <div *ngIf="mode === 'list'">
+
+
+
+    <div class="page-header">
+
+
+
+      <div>
+
+        <h1>Ticket System</h1>
+
+        <p class="subtitle">Tickets</p>
+
+      </div>
+
+
+
+      <div class="search-box">
+
+        <input
+
+          type="text"
+
+          placeholder="🔍 Search Ticket..."
+
+          [value]="searchText"
+
+          (input)="searchText = $any($event.target).value">
+
+      </div>
+
+
+
+      <div class="header-actions">
+
+
+
+        <button
+
+          class="report-btn"
+
+          (click)="Report()">
+
+          Report
+
+        </button>
+
+
+
+        <button
+
+          class="add-btn"
+
+          (click)="openAdd()">
+
+          + Add Ticket
+
+        </button>
+
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+    <div class="table-wrapper">
+
+
+
+      <table>
+
+
+
+        <thead>
+
+
+
+          <tr>
+
+            <th>SPRINT</th>
+
+            <th>TICKET NO</th>
+
+            <th>TICKET DATE</th>
+
+            <th>DELIVERY DATE</th>
+
+            <th>TEAM</th>
+
+            <th>ASSIGN TO</th>
+
+            <th>TICKET STATUS</th>
+
+            <th>ACTION</th>
+
+          </tr>
+
+
+
+        </thead>
+
+
+
+        <tbody>
+
+
+
+          <tr *ngFor="let ticket of filteredTickets()">
+
+
+
+            <td>{{ ticket.sprint }}</td>
+
+            <td>{{ ticket.ticketNo }}</td>
+
+            <td>{{ ticket.ticketDate }}</td>
+
+            <td>{{ ticket.deliveryDate }}</td>
+
+            <td>{{ ticket.team }}</td>
+
+            <td>{{ ticket.assignTo }}</td>
+
+
+
+            <td>
+
+              <span
+
+                class="status-badge"
+
+                [ngClass]="ticket.ticketStatus === 'Open' ? 'status-active' : 'status-suspend'">
+
+
+
+                {{ ticket.ticketStatus }}
+
+
+
+              </span>
+
+            </td>
+
+
+
+            <td>
+
+              <a
+
+                class="view-link"
+
+                (click)="openView(ticket)">
+
+                View
+
+              </a>
+                                          
+<a
+            class="delete-link"
+                (click)="deleteTicket(ticket.ticketNo)"
+                title="Delete">
+
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                  <path d="M10 11v6"></path>
+                  <path d="M14 11v6"></path>
+                  <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
+                </svg>
+
+              </a>
+
+            </td>
+
+
+
+          </tr>
+
+
+
+          <tr *ngIf="filteredTickets().length === 0">
+
+
+
+            <td colspan="8" style="text-align:center;">
+
+              No Tickets Found
+
+            </td>
+
+
+
+          </tr>
+
+
+
+        </tbody>
+
+
+
+      </table>
+
+
+
+    </div>
+
+
+
+    <div class="bottom-back-row">
+
+
+
+      <button
+
+        class="back-btn"
+
+        (click)="goBackToUserMaster()">
+
+        ← Back
+
+      </button>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <!-- ADD / EDIT -->
+
+
+
+  <div
+
+    class="form-page"
+
+    *ngIf="mode === 'add' || mode === 'edit'">
+
+
+
+    <form
+
+      class="form-card"
+
+      [formGroup]="ticketForm"
+
+      (ngSubmit)="saveTicket()">
+
+
+
+      <div class="form-card-header">
+
+
+
+        <h2>
+
+          {{ mode === 'add' ? 'Add Ticket' : 'Edit Ticket' }}
+
+        </h2>
+
+
+
+        <span class="usr-id">
+
+          {{ selectedTicket.ticketNo }}
+
+        </span>
+
+
+
+      </div>
+
+
+
+      <div class="form-row">
+
+
+
+        <div class="form-group">
+
+
+
+          <label>TICKET NO</label>
+
+
+
+          <input
+
+            type="text"
+
+            formControlName="ticketNo"
+
+            readonly>
+
+
+
+        </div>
+
+
+
+        <div class="form-group">
+
+
+
+          <label>CLIENT</label>
+
+
+
+          <select formControlName="client">
+
+
+
+            <option value="">Select Client</option>
+
+
+
+            <option *ngFor="let client of clients" [value]="client">
+
+              {{ client }}
+
+            </option>
+
+
+
+          </select>
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('client')?.touched && ticketForm.get('client')?.invalid"
+
+            style="color:red">
+
+
+
+            Client is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <div class="form-row">
+
+
+
+        <div class="form-group">
+
+
+
+          <label>TICKET DATE</label>
+
+
+
+          <input
+
+            type="date"
+
+            formControlName="ticketDate">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('ticketDate')?.touched && ticketForm.get('ticketDate')?.invalid"
+
+            style="color:red">
+
+
+
+            Ticket Date is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+        <div class="form-group">
+
+
+
+          <label>EXPECTED DELIVERY</label>
+
+
+
+          <input
+
+            type="date"
+
+            formControlName="deliveryDate">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('deliveryDate')?.touched && ticketForm.get('deliveryDate')?.invalid"
+
+            style="color:red">
+
+
+
+            Delivery Date is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <div class="form-row">
+
+
+
+        <div class="form-group">
+
+
+
+          <label>TEAM</label>
+
+
+
+          <select formControlName="team">
+
+
+
+            <option value="">Select Team</option>
+
+
+
+            <option *ngFor="let team of teams" [value]="team">
+
+              {{ team }}
+
+            </option>
+
+
+
+          </select>
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('team')?.touched && ticketForm.get('team')?.invalid"
+
+            style="color:red">
+
+
+
+            Team is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+        <div class="form-group">
+
+
+
+          <label>ASSIGN TO</label>
+
+
+
+          <input
+
+            type="text"
+
+            formControlName="assignTo">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('assignTo')?.touched && ticketForm.get('assignTo')?.invalid"
+
+            style="color:red">
+
+
+
+            Assign To is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+      </div>
+
+      <div class="form-row">
+
+
+
+        <div class="form-group">
+
+
+
+          <label>REQUESTED BY</label>
+
+
+
+          <input
+
+            type="text"
+
+            formControlName="requestedBy">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('requestedBy')?.touched && ticketForm.get('requestedBy')?.invalid"
+
+            style="color:red">
+
+
+
+            Requested By is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+        <div class="form-group">
+
+
+
+          <label>SPRINT</label>
+
+
+
+          <input
+
+            type="text"
+
+            formControlName="sprint">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('sprint')?.touched && ticketForm.get('sprint')?.invalid"
+
+            style="color:red">
+
+
+
+            Sprint is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <div class="form-group">
+
+
+
+        <label>REQUEST DESCRIPTION</label>
+
+
+
+        <textarea
+
+          rows="4"
+
+          formControlName="description">
+
+        </textarea>
+
+
+
+        <small
+
+          *ngIf="ticketForm.get('description')?.touched && ticketForm.get('description')?.invalid"
+
+          style="color:red">
+
+
+
+          Description is required
+
+
+
+        </small>
+
+
+
+      </div>
+
+
+
+      <div class="form-row">
+
+
+
+        <div class="form-group">
+
+
+
+          <label>TICKET OWNER</label>
+
+
+
+          <input
+
+            type="text"
+
+            formControlName="owner">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('owner')?.touched && ticketForm.get('owner')?.invalid"
+
+            style="color:red">
+
+
+
+            Ticket Owner is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+        <div class="form-group">
+
+
+
+          <label>HRS</label>
+
+
+
+          <input
+
+            type="number"
+
+            formControlName="ownerHrs">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('ownerHrs')?.touched && ticketForm.get('ownerHrs')?.invalid"
+
+            style="color:red">
+
+
+
+            Owner Hours is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <div class="form-row">
+
+
+
+        <div class="form-group">
+
+
+
+          <label>DEVELOPER</label>
+
+
+
+          <input
+
+            type="text"
+
+            formControlName="developer">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('developer')?.touched && ticketForm.get('developer')?.invalid"
+
+            style="color:red">
+
+
+
+            Developer is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+        <div class="form-group">
+
+
+
+          <label>HRS</label>
+
+
+
+          <input
+
+            type="number"
+
+            formControlName="developerHrs">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('developerHrs')?.touched && ticketForm.get('developerHrs')?.invalid"
+
+            style="color:red">
+
+
+
+            Developer Hours is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <div class="form-row">
+
+
+
+        <div class="form-group">
+
+
+
+          <label>TESTER</label>
+
+
+
+          <input
+
+            type="text"
+
+            formControlName="tester">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('tester')?.touched && ticketForm.get('tester')?.invalid"
+
+            style="color:red">
+
+
+
+            Tester is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+        <div class="form-group">
+
+
+
+          <label>HRS</label>
+
+
+
+          <input
+
+            type="number"
+
+            formControlName="testerHrs">
+
+
+
+          <small
+
+            *ngIf="ticketForm.get('testerHrs')?.touched && ticketForm.get('testerHrs')?.invalid"
+
+            style="color:red">
+
+
+
+            Tester Hours is required
+
+
+
+          </small>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <div class="btn-row">
+
+
+
+        <button
+
+          type="button"
+
+          class="btn-back"
+
+          (click)="backToList()">
+
+
+
+          Back
+
+
+
+        </button>
+
+
+
+        <button
+
+          type="submit"
+
+          class="btn-save">
+
+
+
+          Save
+
+
+
+        </button>
+
+
+
+      </div>
+
+
+
+    </form>
+
+
+
+  </div>
+
+
+
+</div>

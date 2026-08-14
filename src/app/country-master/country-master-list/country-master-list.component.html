@@ -1,0 +1,90 @@
+<div class="page-content">
+
+  <div class="page-header">
+
+    <div>
+      <h1>Country Master</h1>
+      <p class="subtitle">Countries registered in the ticketing system.</p>
+    </div>
+
+    <div class="header-actions">
+
+      <button class="report-btn" (click)="Report()">
+        Report
+      </button>
+
+      <button class="add-btn" (click)="openAdd()">
+        + Add Country
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="table-wrapper">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>COUNTRY CODE</th>
+          <th>COUNTRY NAME</th>
+          <th>STATUS</th>
+          <th>ACTION</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let country of filteredCountries()">
+
+          <td>{{country.countryCode}}</td>
+
+          <td>{{country.countryName}}</td>
+
+          <td>
+
+            <span
+              class="status-badge"
+              [ngClass]="country.status=='Active' ? 'status-active':'status-suspend'">
+
+              {{country.status}}
+
+            </span>
+
+          </td>
+
+          <td class="view-cell">
+
+            <a
+              class="view-link"
+              (click)="openView(country)">
+
+              View
+
+            </a>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="bottom-back-row">
+
+    <button
+      class="back-btn"
+      (click)="goBackToUserMaster()">
+
+      <span>&#8592;</span>
+      Back
+
+    </button>
+
+  </div>
+
+</div>

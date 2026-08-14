@@ -1,0 +1,589 @@
+<div class="page-content">
+
+
+
+  <!-- LIST VIEW -->
+
+  <div *ngIf="mode === 'list'">
+
+
+
+    <div class="page-header">
+
+
+
+      <div>
+
+        <h1>Client Master</h1>
+
+        <p class="subtitle">Clients registered in the ticketing system.</p>
+
+      </div>
+
+
+
+      <div class="search-box">
+
+
+
+        <input
+
+          type="text"
+
+          placeholder="🔍 Search Client..."
+
+          [value]="searchText"
+
+          (input)="searchText = $any($event.target).value">
+
+
+
+      </div>
+
+
+
+      <div class="header-actions">
+
+
+
+        <button
+
+          class="report-btn"
+
+          (click)="Report()">
+
+          Report
+
+        </button>
+
+
+
+        <button
+
+          class="add-btn"
+
+          (click)="openAdd()">
+
+          + Add Client
+
+        </button>
+
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+    <div class="table-wrapper">
+
+
+
+      <table>
+
+
+
+        <thead>
+
+
+
+          <tr>
+
+
+
+            <th>CLIENT NAME</th>
+
+            <th>COUNTRY</th>
+
+            <th>STATUS</th>
+
+            <th>ACTION</th>
+
+
+
+          </tr>
+
+
+
+        </thead>
+
+
+
+        <tbody>
+
+
+
+          <tr *ngFor="let client of filteredClients()">
+
+
+
+            <td>{{ client.clientName }}</td>
+
+
+
+            <td>{{ client.country }}</td>
+
+
+
+            <td>
+
+
+
+              <span
+
+                class="status-badge"
+
+                [ngClass]="client.status === 'Active'
+
+                ? 'status-active'
+
+                : 'status-suspend'">
+
+
+
+                {{ client.status }}
+
+
+
+              </span>
+
+
+
+            </td>
+
+
+
+            <td>
+
+
+
+              <a
+
+                class="view-link"
+
+                (click)="openView(client)">
+
+
+
+                View
+
+
+
+              </a>
+
+<a
+            class="delete-link"
+                (click)="deleteClient(client.id)"
+                title="Delete">
+
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                  <path d="M10 11v6"></path>
+                  <path d="M14 11v6"></path>
+                  <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
+                </svg>
+
+              </a>
+
+            
+            </td>
+
+
+
+          </tr>
+
+
+
+          <tr *ngIf="filteredClients().length === 0">
+
+
+
+            <td colspan="4" style="text-align:center">
+
+
+
+              No Clients Found
+
+
+
+            </td>
+
+
+
+          </tr>
+
+
+
+        </tbody>
+
+
+
+      </table>
+
+
+
+    </div>
+
+
+
+    <div class="bottom-back-row">
+
+
+
+      <button
+
+        class="back-btn"
+
+        (click)="goBackToUserMaster()">
+
+
+
+        ← Back
+
+
+
+      </button>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <!-- ADD / EDIT -->
+
+
+
+  <div
+
+    class="form-page"
+
+    *ngIf="mode === 'add' || mode === 'edit'">
+
+
+
+    <form
+
+      class="form-card"
+
+      [formGroup]="clientForm"
+
+      (ngSubmit)="saveClient()">
+
+
+
+      <div class="form-card-header">
+
+
+
+        <h2>
+
+
+
+          {{ mode === 'add' ? 'Add Client' : 'Edit Client' }}
+
+
+
+        </h2>
+
+
+
+        <span class="usr-id">
+
+
+
+          {{ selectedClient.id }}
+
+
+
+        </span>
+
+
+
+      </div>
+
+
+
+      <!-- CLIENT NAME -->
+
+
+
+      <div class="form-group">
+
+
+
+        <label>CLIENT NAME</label>
+
+
+
+        <input
+
+          type="text"
+
+          formControlName="clientName"
+
+          placeholder="Enter Client Name">
+
+
+
+        <small
+
+          *ngIf="clientForm.get('clientName')?.touched &&
+
+                 clientForm.get('clientName')?.invalid"
+
+          style="color:red">
+
+
+
+          Client Name is required
+
+
+
+        </small>
+
+
+
+      </div>
+
+
+
+      <!-- CLIENT CODE -->
+
+
+
+      <div class="form-group">
+
+
+
+        <label>CLIENT CODE</label>
+
+
+
+        <input
+
+          type="text"
+
+          formControlName="clientCode"
+
+          placeholder="Enter Client Code">
+
+
+
+        <small
+
+          *ngIf="clientForm.get('clientCode')?.touched &&
+
+                 clientForm.get('clientCode')?.invalid"
+
+          style="color:red">
+
+
+
+          Client Code is required
+
+
+
+        </small>
+
+
+
+      </div>
+
+      <!-- COUNTRY -->
+
+
+
+      <div class="form-group">
+
+
+
+        <label>COUNTRY</label>
+
+
+
+        <select formControlName="country">
+
+
+
+          <option value="">Select Country</option>
+
+
+
+          <option *ngFor="let c of countries" [value]="c">
+
+
+
+            {{ c }}
+
+
+
+          </option>
+
+
+
+        </select>
+
+
+
+        <small
+
+          *ngIf="clientForm.get('country')?.touched &&
+
+                 clientForm.get('country')?.invalid"
+
+          style="color:red">
+
+
+
+          Country is required
+
+
+
+        </small>
+
+
+
+      </div>
+
+
+
+      <!-- EMAIL -->
+
+
+
+      <div class="form-group">
+
+
+
+        <label>EMAIL</label>
+
+
+
+        <input
+
+          type="email"
+
+          formControlName="email"
+
+          placeholder="Enter Email">
+
+
+
+        <small
+
+          *ngIf="clientForm.get('email')?.touched &&
+
+                 clientForm.get('email')?.invalid"
+
+          style="color:red">
+
+
+
+          Email is required
+
+
+
+        </small>
+
+
+
+      </div>
+
+
+
+      <!-- STATUS -->
+
+
+
+      <div class="form-group">
+
+
+
+        <label>STATUS</label>
+
+
+
+        <select formControlName="status">
+
+
+
+          <option value="Active">Active</option>
+
+
+
+          <option value="Suspend">Suspend</option>
+
+
+
+        </select>
+
+
+
+      </div>
+
+
+
+      <!-- BUTTONS -->
+
+
+
+      <div class="btn-row">
+
+
+
+        <button
+
+          type="button"
+
+          class="btn-back"
+
+          (click)="backToList()">
+
+
+
+          Back
+
+
+
+        </button>
+
+
+
+        <button
+
+          type="submit"
+
+          class="btn-save">
+
+
+
+          Save
+
+
+
+        </button>
+
+
+
+      </div>
+
+
+
+    </form>
+
+
+
+  </div>
+
+
+
+</div>

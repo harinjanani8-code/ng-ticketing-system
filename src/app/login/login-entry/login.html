@@ -1,0 +1,570 @@
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>blufin Ticketing System — sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101825;
+    --ink-2:#182233;
+    --paper:#EFE9DC;
+    --paper-2:#E4DCC9;
+    --ink-on-paper:#362F24;
+    --muted-on-paper:#6B6355;
+    --brass:#D98F2B;
+    --brass-dark:#8A5A15;
+    --teal:#2F9C8B;
+    --teal-dark:#1B5F55;
+    --brick:#C64F45;
+    --brick-dark:#7A2A24;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--ink);
+    color:var(--paper);
+    min-height:100vh;
+  }
+  .stage{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+  /* ---------- left brand panel ---------- */
+  .brand-panel{
+    position:relative;
+    padding:56px 48px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(217,143,43,0.10), transparent 40%),
+      var(--ink);
+    border-right:1px dashed rgba(239,233,220,0.18);
+  }
+  .brand-mark{display:flex;align-items:center;gap:12px;}
+  .brand-mark .logo{
+    width:42px;height:42px;border-radius:8px;
+    background:var(--brass);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;
+    color:var(--ink);
+  }
+  .brand-mark .name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;letter-spacing:0.2px;}
+  .brand-mark .name span{color:var(--brass);}
+
+  .brand-copy h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:500;
+    font-size:clamp(28px,3vw,38px);
+    line-height:1.25;
+    max-width:420px;
+    margin:0 0 14px;
+  }
+  .brand-copy p{
+    color:rgba(239,233,220,0.62);
+    max-width:380px;
+    line-height:1.6;
+    font-size:15px;
+  }
+
+  .stub-strip{
+    display:flex;
+    align-items:center;
+    gap:0;
+    border-top:1px dashed rgba(239,233,220,0.25);
+    padding-top:20px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:rgba(239,233,220,0.5);
+    justify-content:space-between;
+  }
+  .stub-strip .dot{width:6px;height:6px;border-radius:50%;background:var(--brass);display:inline-block;margin-right:8px;}
+
+  /* ---------- right auth panel ---------- */
+  .auth-panel{
+    background:var(--ink-2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 24px;
+  }
+
+  .ticket-card{
+    width:100%;
+    max-width:400px;
+    background:var(--paper);
+    color:var(--ink-on-paper);
+    border-radius:var(--radius);
+    padding:32px 32px 28px;
+    position:relative;
+  }
+  /* perforated tear edge */
+  .perforation{
+    position:absolute;
+    top:0;left:24px;right:24px;
+    height:1px;
+    background-image:radial-gradient(circle, var(--ink-2) 2px, transparent 2.2px);
+    background-size:14px 1px;
+    background-repeat:repeat-x;
+    background-position:0 -1px;
+  }
+  .ticket-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:22px;
+  }
+  .ticket-head h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:500;
+    font-size:20px;
+    margin:0;
+  }
+  .ticket-head .serial{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--muted-on-paper);
+  }
+
+  label{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.3px;
+    text-transform:uppercase;
+    color:var(--muted-on-paper);
+    margin:16px 0 6px;
+  }
+  label:first-of-type{margin-top:0;}
+
+  .field-wrap{position:relative;}
+  input[type="text"],input[type="password"],input[type="email"]{
+    width:100%;
+    padding:11px 12px;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    border-radius:8px;
+    border:1px solid var(--paper-2);
+    background:#fff;
+    color:var(--ink-on-paper);
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  input:focus{
+    border-color:var(--brass);
+    box-shadow:0 0 0 3px rgba(217,143,43,0.18);
+  }
+  .toggle-vis{
+    position:absolute;
+    right:10px;top:50%;
+    transform:translateY(-50%);
+    border:none;background:none;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:600;
+    color:var(--muted-on-paper);
+    padding:4px;
+  }
+
+  .row-between{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:16px;
+    font-size:13px;
+  }
+  .remember{display:flex;align-items:center;gap:7px;color:var(--muted-on-paper);cursor:pointer;user-select:none;}
+  .remember input{width:15px;height:15px;accent-color:var(--brass);}
+  .link-btn{
+    background:none;border:none;cursor:pointer;
+    color:var(--teal-dark);
+    font-weight:600;font-size:13px;
+    padding:0;
+  }
+  .link-btn:hover{text-decoration:underline;}
+
+  .captcha-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-top:8px;
+  }
+  #captchaCanvas{
+    border-radius:8px;
+    border:1px solid var(--paper-2);
+    background:#fff;
+    flex:1;
+    height:46px;
+  }
+  .reload-btn{
+    width:46px;height:46px;
+    border-radius:8px;
+    border:1px solid var(--paper-2);
+    background:#fff;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink-on-paper);
+    flex-shrink:0;
+  }
+  .reload-btn:active{transform:scale(0.94);}
+  .reload-btn svg{width:18px;height:18px;}
+
+  .error-box{
+    margin-top:14px;
+    padding:10px 12px;
+    border-radius:8px;
+    background:rgba(198,79,69,0.12);
+    border:1px solid rgba(198,79,69,0.35);
+    color:var(--brick-dark);
+    font-size:13px;
+    line-height:1.4;
+  }
+
+  .cta{
+    width:100%;
+    margin-top:22px;
+    padding:13px;
+    border:none;
+    border-radius:8px;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:opacity .15s ease;
+  }
+  .cta:hover{opacity:0.9;}
+  .cta:disabled{opacity:0.6;cursor:default;}
+  .spinner{
+    width:14px;height:14px;
+    border-radius:50%;
+    border:2px solid rgba(239,233,220,0.35);
+    border-top-color:var(--paper);
+    animation:spin .7s linear infinite;
+    display:none;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .success-note{
+    margin-top:14px;
+    padding:10px 12px;
+    border-radius:8px;
+    background:rgba(47,156,139,0.12);
+    border:1px solid rgba(47,156,139,0.35);
+    color:var(--teal-dark);
+    font-size:13px;
+    line-height:1.4;
+  }
+
+  /* ---------- modal (normal-flow overlay, no position:fixed) ---------- */
+  .modal-shell{
+    grid-column:1 / -1;
+    min-height:100vh;
+    background:rgba(16,24,37,0.72);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .modal-shell[hidden]{display:none;}
+  .modal-card{max-width:360px;}
+  .modal-card .close-x{
+    position:absolute;top:14px;right:14px;
+    background:none;border:none;cursor:pointer;
+    color:var(--muted-on-paper);font-size:18px;line-height:1;
+  }
+
+  @media (max-width:860px){
+    .stage{grid-template-columns:1fr;}
+    .brand-panel{padding:36px 28px;min-height:220px;border-right:none;border-bottom:1px dashed rgba(239,233,220,0.18);}
+    .brand-copy p{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <aside class="brand-panel">
+    <div class="brand-mark">
+      <div class="logo">b</div>
+      <div class="name">blufin<span>.</span></div>
+    </div>
+
+    <div class="brand-copy">
+      <h1>Every ticket, tracked from request to release.</h1>
+      <p>Sign in with your team account to view assignments, log hours, and move tickets through the queue.</p>
+    </div>
+
+    <div class="stub-strip">
+      <span><span class="dot"></span>session gate</span>
+      <span id="dateStamp">— — —</span>
+    </div>
+  </aside>
+
+  <main class="auth-panel">
+    <form class="ticket-card" id="loginForm" novalidate>
+      <div class="perforation"></div>
+
+      <div class="ticket-head">
+        <h2>Sign in</h2>
+        <span class="serial" id="serialStamp">SES-000000</span>
+      </div>
+
+      <label for="loginId">Login ID</label>
+      <input type="text" id="loginId" autocomplete="username" placeholder="your.name">
+
+      <label for="password">Password</label>
+      <div class="field-wrap">
+        <input type="password" id="password" autocomplete="current-password" placeholder="Enter your password">
+        <button type="button" class="toggle-vis" id="toggleVis">show</button>
+      </div>
+
+      <div class="row-between">
+        <label class="remember">
+          <input type="checkbox" id="remember">
+          Remember my login ID
+        </label>
+        <button type="button" class="link-btn" id="forgotOpen">Forgot password?</button>
+      </div>
+
+      <label for="captchaInput">Security code</label>
+      <div class="captcha-row">
+        <canvas id="captchaCanvas" width="220" height="46"></canvas>
+        <button type="button" class="reload-btn" id="reloadCaptcha" aria-label="Get a new code">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+            <polyline points="21 3 21 9 15 9"/>
+          </svg>
+        </button>
+      </div>
+      <input type="text" id="captchaInput" placeholder="Type the code shown above" style="margin-top:10px;" autocomplete="off">
+
+      <div class="error-box" id="errorBox" hidden></div>
+      <div class="success-note" id="successBox" hidden></div>
+
+      <button type="submit" class="cta" id="submitBtn">
+        <span class="spinner" id="spinner"></span>
+        <span id="submitLabel">Sign in</span>
+      </button>
+    </form>
+  </main>
+
+</div>
+
+<div class="modal-shell" id="forgotModal" hidden>
+  <div class="ticket-card modal-card" style="position:relative;">
+    <button class="close-x" id="forgotClose" aria-label="Close">&#10005;</button>
+    <div class="perforation"></div>
+    <div class="ticket-head"><h2>Reset password</h2></div>
+    <p style="font-size:13px;color:var(--muted-on-paper);line-height:1.5;margin:0 0 4px;">
+      Enter the email on your account. We'll send a link to set a new password.
+    </p>
+    <label for="resetEmail">Registered email</label>
+    <input type="email" id="resetEmail" placeholder="name@company.com">
+    <div class="error-box" id="resetError" hidden></div>
+    <div class="success-note" id="resetSuccess" hidden></div>
+    <button type="button" class="cta" id="resetSend">
+      <span class="spinner" id="resetSpinner"></span>
+      <span id="resetLabel">Send reset link</span>
+    </button>
+  </div>
+</div>
+
+  // ---- date / session stub (cosmetic) ----
+  document.getElementById('dateStamp').textContent =
+    new Date().toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'});
+  document.getElementById('serialStamp').textContent =
+    'SES-' + Math.floor(100000 + Math.random()*900000);
+
+  // ---- in-memory store standing in for a backend session/cookie ----
+  // NOTE: this demo keeps "remembered" state in JS memory only.
+  // In production, "remember me" should set a long-lived, httpOnly,
+  // secure cookie from the server after Login Master validation —
+  // never store the password itself client-side.
+  const session = { rememberedId: null };
+
+  // ---- password show / hide ----
+  const pwInput = document.getElementById('password');
+  document.getElementById('toggleVis').addEventListener('click', (e) => {
+    const isPwd = pwInput.type === 'password';
+    pwInput.type = isPwd ? 'text' : 'password';
+    e.target.textContent = isPwd ? 'hide' : 'show';
+  });
+
+  // ---- captcha ----
+  const CAPTCHA_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // no 0/O/1/I/L
+  let currentCaptcha = '';
+  const canvas = document.getElementById('captchaCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function randCaptcha(len = 5){
+    let s = '';
+    for (let i=0;i<len;i++) s += CAPTCHA_CHARS[Math.floor(Math.random()*CAPTCHA_CHARS.length)];
+    return s;
+  }
+
+  function drawCaptcha(){
+    currentCaptcha = randCaptcha();
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // noise lines
+    for (let i=0;i<4;i++){
+      ctx.strokeStyle = `rgba(54,47,36,${0.10 + Math.random()*0.12})`;
+      ctx.beginPath();
+      ctx.moveTo(Math.random()*canvas.width, Math.random()*canvas.height);
+      ctx.lineTo(Math.random()*canvas.width, Math.random()*canvas.height);
+      ctx.stroke();
+    }
+    // characters
+    const gap = canvas.width / (currentCaptcha.length + 1);
+    for (let i=0;i<currentCaptcha.length;i++){
+      ctx.save();
+      const x = gap * (i+1);
+      const y = canvas.height/2 + (Math.random()*8-4);
+      ctx.translate(x,y);
+      ctx.rotate((Math.random()*0.5-0.25));
+      ctx.font = '600 22px JetBrains Mono, monospace';
+      ctx.fillStyle = '#362F24';ng
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(currentCaptcha[i], 0, 0);
+      ctx.restore();
+    }
+    // noise dots
+    for (let i=0;i<18;i++){
+      ctx.fillStyle = `rgba(54,47,36,${0.08 + Math.random()*0.1})`;
+      ctx.beginPath();
+      ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, 1, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+  drawCaptcha();
+  document.getElementById('reloadCaptcha').addEventListener('click', drawCaptcha);
+
+  // ---- error / success helpers ----
+  function showError(msg){
+    const box = document.getElementById('errorBox');
+    box.textContent = msg;
+    box.hidden = false;
+    document.getElementById('successBox').hidden = true;
+  }
+  function clearMessages(){
+    document.getElementById('errorBox').hidden = true;
+    document.getElementById('successBox').hidden = true;
+  }
+
+  // ---- prefill remembered login id ----
+  const loginIdInput = document.getElementById('loginId');
+  const rememberBox = document.getElementById('remember');
+  if (session.rememberedId){
+    loginIdInput.value = session.rememberedId;
+    rememberBox.checked = true;
+  }
+
+  // ---- submit handling ----
+  const form = document.getElementById('loginForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const spinner = document.getElementById('spinner');
+  const submitLabel = document.getElementById('submitLabel');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearMessages();
+
+    const id = loginIdInput.value.trim();
+    const pwd = pwInput.value;
+    const code = document.getElementById('captchaInput').value.trim();
+
+    if (!id || !pwd){
+      showError('Enter your login ID and password.');
+      return;
+    }
+    if (!code){
+      showError('Enter the security code shown in the image.');
+      return;
+    }
+    if (code.toUpperCase() !== currentCaptcha){
+      showError('That code doesn\'t match. Try the new one below.');
+      drawCaptcha();
+      document.getElementById('captchaInput').value = '';
+      return;
+    }
+
+    // "Remember me" — persist only the login id in this demo's memory store
+    session.rememberedId = rememberBox.checked ? id : null;
+
+    // ---- simulate calling the backend Login Master validation ----
+    // In production: POST { id, password } to your auth endpoint over HTTPS,
+    // which checks the Login Master table, verifies the encrypted password,
+    // confirms Status = Active, and returns a session token / cookie.
+    submitBtn.disabled = true;
+    spinner.style.display = 'inline-block';
+    submitLabel.textContent = 'Checking credentials…';
+
+    setTimeout(() => {
+      submitBtn.disabled = false;
+      spinner.style.display = 'none';
+      submitLabel.textContent = 'Sign in';
+
+      // Demo outcome only — wire this branch to your real API response.
+      document.getElementById('successBox').textContent =
+        'Credentials look good — this is a front-end demo, so no account was actually created. Connect the form to your Login Master API to go live.';
+      document.getElementById('successBox').hidden = false;
+    }, 900);
+  });
+
+  // ---- forgot password modal ----
+  const forgotModal = document.getElementById('forgotModal');
+  document.getElementById('forgotOpen').addEventListener('click', () => {
+    forgotModal.hidden = false;
+    document.getElementById('resetError').hidden = true;
+    document.getElementById('resetSuccess').hidden = true;
+  });
+  document.getElementById('forgotClose').addEventListener('click', () => {
+    forgotModal.hidden = true;
+  });
+
+  document.getElementById('resetSend').addEventListener('click', () => {
+    const emailInput = document.getElementById('resetEmail');
+    const email = emailInput.value.trim();
+    const errBox = document.getElementById('resetError');
+    const okBox = document.getElementById('resetSuccess');
+    errBox.hidden = true; okBox.hidden = true;
+
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailOk){
+      errBox.textContent = 'Enter a valid email address.';
+      errBox.hidden = false;
+      return;
+    }
+
+    const btn = document.getElementById('resetSend');
+    const spin = document.getElementById('resetSpinner');
+    const label = document.getElementById('resetLabel');
+    btn.disabled = true;
+    spin.style.display = 'inline-block';
+    label.textContent = 'Sending…';
+
+    // In production: POST the email to your reset endpoint. The backend
+    // looks it up against the registered account and emails a
+    // time-limited reset link — it never confirms account existence
+    // in the response, to avoid leaking which emails are registered.
+    setTimeout(() => {
+      btn.disabled = false;
+      spin.style.display = 'none';
+      label.textContent = 'Send reset link';
+      okBox.textContent = 'If that email matches an account, a reset link is on its way.';
+      okBox.hidden = false;
+    }, 900);
+  });

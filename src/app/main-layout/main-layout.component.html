@@ -1,0 +1,17 @@
+<div class="topbar">
+  <span class="brand">blufin</span>
+
+  <nav class="tabs">
+    <a routerLink="/user-master-login" routerLinkActive="active">User Login</a>
+    <a routerLink="/team-master-list" routerLinkActive="active">Team Master</a>
+    <a routerLink="/client-master" routerLinkActive="active">Client Master</a>
+    <a routerLink="/country-master" routerLinkActive="active">Country Master</a>
+    <a routerLink="/ticketing-system" routerLinkActive="active">Ticketing System</a>
+  </nav>
+
+  <a class="signout" routerLink="/login">Sign out</a>
+</div>
+
+<div class="page-content">
+  <router-outlet></router-outlet>
+</div>

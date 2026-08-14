@@ -1,0 +1,56 @@
+body {
+  background-image: url("../../../assets/images/lightbule.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: bgZoom 12s ease-in-out infinite alternate;
+}
+
+.card {
+  backdrop-filter: blur(6px);
+  background: rgba(255,255,255,0.92);
+  animation: cardAppear .8s ease;
+}
+
+@keyframes bgZoom {
+  from {
+    background-size: 100%;
+  }
+  to {
+    background-size: 106%;
+  }
+}
+
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+
+.d-flex.justify-content-center,
+.text-center,
+.container {
+  animation: smoothAppear .8s cubic-bezier(.25,.46,.45,.94);
+}
+
+@keyframes smoothAppear {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

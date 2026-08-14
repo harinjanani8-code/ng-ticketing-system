@@ -1,0 +1,165 @@
+<div class="page-content">
+
+  <!-- LIST VIEW -->
+  <div *ngIf="mode === 'list'">
+
+    <div class="page-header">
+      <div>
+        <h1>Team Master</h1>
+        <p class="subtitle">Teams</p>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="🔍 Search Team..."
+          [value]="searchText"
+          (input)="searchText = $any($event.target).value">
+      </div>
+
+      <div class="header-actions">
+        <button class="report-btn" (click)="report()">
+          Report
+        </button>
+
+        <button class="add-btn" (click)="openAdd()">
+          + Add Team
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>TEAM NAME</th>
+            <th>TEAM CODE</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let team of filteredTeams()">
+            <td>{{ team.teamName }}</td>
+            <td>{{ team.teamCode }}</td>
+
+            <td>
+              <span
+                class="status-badge"
+                [ngClass]="team.status === 'Active' ? 'status-active' : 'status-suspend'">
+                {{ team.status }}
+              </span>
+            </td>
+
+            <td>
+              <a class="view-link" (click)="openView(team)">
+                View
+              </a>
+                            
+<a
+            class="delete-link"
+                (click)="deleteTeam(team.id)"
+                title="Delete">
+
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                  <path d="M10 11v6"></path>
+                  <path d="M14 11v6"></path>
+                  <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
+                </svg>
+
+              </a>
+            </td>
+          </tr>
+
+          <tr *ngIf="filteredTeams().length === 0">
+            <td colspan="4" style="text-align: center;">
+              No Teams Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bottom-back-row">
+      <button class="back-btn" (click)="goBackToUserMaster()">
+        ← Back
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ADD / EDIT VIEW -->
+  <div class="form-page" *ngIf="mode === 'add' || mode === 'edit'">
+
+    <form class="form-card"
+          [formGroup]="teamForm"
+          (ngSubmit)="saveTeam()">
+
+      <div class="form-card-header">
+        <h2>{{ mode === 'add' ? 'Add Team' : 'Edit Team' }}</h2>
+        <span class="usr-id">{{ selectedTeam.id }}</span>
+      </div>
+
+      <div class="form-group">
+        <label>TEAM NAME</label>
+        <input
+          type="text"
+          formControlName="teamName"
+          placeholder="Enter Team Name">
+
+        <small
+          *ngIf="teamForm.get('teamName')?.touched && teamForm.get('teamName')?.invalid"
+          style="color:red">
+          Team Name is required
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>TEAM CODE</label>
+        <input
+          type="text"
+          maxlength="5"
+          formControlName="teamCode"
+          placeholder="Enter Team Code">
+
+        <small
+          *ngIf="teamForm.get('teamCode')?.touched && teamForm.get('teamCode')?.invalid"
+          style="color:red">
+          Team Code is required
+        </small>
+      </div>
+
+      <div class="form-group">
+        
+        <label>STATUS</label>
+
+        <select formControlName="status">
+          <option value="Active">Active</option>
+          <option value="Suspend">Suspend</option>
+        </select>
+    
+      </div>
+
+      <div class="btn-row">
+        <button
+          type="button"
+          class="btn-back"
+          (click)="backToList()">
+          Back
+        </button>
+
+        <button
+          type="submit"
+          class="btn-save">
+          Save
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
